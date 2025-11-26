@@ -1,0 +1,19 @@
+{
+  "name": "reservation-system",
+  "version": "1.0.0",
+  "description": "System rezerwacji z optymalizacjami dla CyberFolks",
+  "scripts": {
+    "install:all": "cd booking-api && npm install && cd ../next-booking && npm install",
+    "build:all": "cd booking-api && npm run build && cd ../next-booking && npm run build",
+    "start:cyberfolks": "pm2 start ecosystem.config.js",
+    "stop:cyberfolks": "pm2 stop all",
+    "restart:cyberfolks": "pm2 restart all",
+    "logs:cyberfolks": "pm2 logs",
+    "monit:cyberfolks": "pm2 monit",
+    "deploy:cyberfolks": "./cyberfolks-deploy.sh"
+  },
+  "devDependencies": {
+    "pm2": "^5.3.0"
+  }
+}
+

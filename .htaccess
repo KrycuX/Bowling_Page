@@ -1,0 +1,28 @@
+# Main .htaccess for the application
+RewriteEngine On
+
+# API Routes - redirect to booking-api
+RewriteCond %{REQUEST_URI} ^/api/(.*)$
+RewriteRule ^api/(.*)$ /booking-api/public/$1 [L]
+
+# Frontend Routes - redirect to next-booking
+RewriteCond %{REQUEST_URI} !^/api/
+RewriteRule ^(.*)$ /next-booking/public/$1 [L]
+
+# Security headers
+Header always set X-Content-Type-Options nosniff
+Header always set X-Frame-Options DENY
+Header always set X-XSS-Protection "1; mode=block"
+Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+# CORS for API
+<LocationMatch "^/api/">
+    Header always set Access-Control-Allow-Origin "https://thealley2b.pl"
+    Header always set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+    Header always set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
+    Header always set Access-Control-Allow-Credentials "true"
+</LocationMatch>
+
+# Handle preflight requests
+RewriteCond %{REQUEST_METHOD} OPTIONS
+RewriteRule ^(.*)$ $1 [R=200,L]

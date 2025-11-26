@@ -1,0 +1,43 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "outDir": "dist",
+    "rootDir": ".",
+    "strict": false,
+    "strictPropertyInitialization": false,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "noImplicitAny": false,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "declaration": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  },
+  "include": ["src", "scripts"],
+  "exclude": [
+    "node_modules", 
+    "dist",
+    "src/routes/admin/**/*",
+    "src/routes/availability.ts",
+    "src/routes/coupons.ts", 
+    "src/routes/schedule.ts",
+    "src/services/adminOrderService.ts",
+    "src/services/adminUserService.ts",
+    "src/services/auditService.ts",
+    "src/services/availabilityService.ts",
+    "src/services/coupon.service.ts",
+    "src/services/orderService.ts",
+    "src/services/scheduleService.ts",
+    "src/services/sessionService.ts",
+    "src/validators/adminOrders.ts",
+    "src/validators/adminUsers.ts", 
+    "src/validators/schedule.ts",
+    "src/middleware/requireAuth.ts",
+    "scripts/cleanup-holds.ts",
+    "scripts/cleanup-pending-payment.ts"
+  ]
+}
