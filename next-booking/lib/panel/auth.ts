@@ -8,15 +8,9 @@ type LoginResponse = {
 
 type MeResponse = LoginResponse;
 
-export async function login(email: string, password: string, turnstileToken?: string) {
-  const headers: Record<string, string> = {};
-  if (turnstileToken) {
-    headers['CF-Turnstile-Response'] = turnstileToken;
-  }
-  
+export async function login(email: string, password: string) {
   const result = await apiFetch<LoginResponse>('/admin/auth/login', {
     method: 'POST',
-    headers,
     body: JSON.stringify({ email, password })
   });
 

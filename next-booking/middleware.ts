@@ -85,11 +85,10 @@ export async function middleware(request: NextRequest) {
   if (!pathname.startsWith('/api/') && !pathname.startsWith('/_next/')) {
     const csp = [
       "default-src 'self'",
-      `script-src 'self' 'nonce-${nonce}' https://challenges.cloudflare.com https://www.googletagmanager.com https://www.google-analytics.com`,
-      "connect-src 'self' https://www.google-analytics.com https://api.thealley2b.pl https://challenges.cloudflare.com",
-      "img-src 'self' data: https://www.google-analytics.com https://challenges.cloudflare.com",
+      `script-src 'self' 'nonce-${nonce}' https://www.googletagmanager.com https://www.google-analytics.com`,
+      "connect-src 'self' https://www.google-analytics.com https://api.bowlinghub.pl",
+      "img-src 'self' data: https://www.google-analytics.com",
       "style-src 'self' 'unsafe-inline'",
-      "frame-src https://challenges.cloudflare.com",
       "frame-ancestors 'none'",
     ].join('; ');
 

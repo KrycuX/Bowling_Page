@@ -14,7 +14,6 @@ import { useQueryClient } from '@tanstack/react-query';
 import { login } from '../../../lib/panel/auth';
 import { clearPanelSession } from '../../../lib/panel/session';
 import { useAdminAuth } from '../../../hooks/panel/useAdminAuth';
-import { Turnstile } from '../../../components/Turnstile';
 
 export default function PanelLoginPage() {
   const router = useRouter();
@@ -24,7 +23,6 @@ export default function PanelLoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -35,15 +33,10 @@ export default function PanelLoginPage() {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     
-    if (!turnstileToken) {
-      setError('Proszę ukończyć weryfikację zabezpieczającą');
-      return;
-    }
-    
     setError(null);
     setLoading(true);
     try {
-      await login(email, password, turnstileToken);
+      await login(email, password);
       // Invalidate and refetch auth query to update authentication state
       await queryClient.invalidateQueries({ queryKey: ['admin', 'me'] });
       await refetch();
@@ -79,19 +72,7 @@ export default function PanelLoginPage() {
               onChange={(event) => setPassword(event.target.value)}
               required
             />
-            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-              <Turnstile
-                siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ''}
-                onSuccess={(token) => setTurnstileToken(token)}
-                onError={() => {
-                  setTurnstileToken(null);
-                  setError('Weryfikacja zabezpieczająca nie powiodła się. Spróbuj ponownie.');
-                }}
-                mode="managed"
-                theme="auto"
-              />
-            </Box>
-            <Button type="submit" variant="contained" disabled={loading || !turnstileToken}>
+            <Button type="submit" variant="contained" disabled={loading}>
               Zaloguj
             </Button>
           </Stack>

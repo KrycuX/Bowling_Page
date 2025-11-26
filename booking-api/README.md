@@ -1,10 +1,10 @@
 ﻿# Booking API
 
-Backend API dla systemu rezerwacji The Alley 2b.
+Backend API dla systemu rezerwacji BowlingHub (projekt demo do portfolio).
 
-## URL Produkcyjny
-- **API**: `https://thealley2b.pl/api`
-- **Frontend**: `https://thealley2b.pl/rezerwacje`
+## Przykładowe URL-e produkcyjne
+- **API**: `https://api.bowlinghub.pl`
+- **Frontend**: `https://rezerwacje.bowlinghub.pl`
 
 ## Funkcjonalności
 
@@ -82,8 +82,8 @@ npm run cleanup:pending
 NODE_ENV=production
 APP_PORT=4000
 APP_HOST=0.0.0.0
-APP_URL=https://thealley2b.pl/api
-ALLOWED_ORIGINS=https://thealley2b.pl
+APP_URL=https://api.bowlinghub.pl
+ALLOWED_ORIGINS=https://rezerwacje.bowlinghub.pl
 
 # Baza danych
 DATABASE_URL=mysql://user:password@localhost:3306/reservation_system
@@ -127,8 +127,8 @@ P24_POS_ID=your_pos_id
 P24_CRC=your_crc_key
 P24_API_KEY=your_api_key
 P24_MODE=production
-P24_RETURN_URL=https://thealley2b.pl/rezerwacje/powrot
-P24_STATUS_URL=https://thealley2b.pl/api/payments/p24/webhook
+P24_RETURN_URL=https://rezerwacje.bowlinghub.pl/rezerwacje/powrot
+P24_STATUS_URL=https://api.bowlinghub.pl/payments/p24/webhook
 ```
 
 ## Deployment
@@ -137,7 +137,7 @@ P24_STATUS_URL=https://thealley2b.pl/api/payments/p24/webhook
 
 ```apache
 <VirtualHost *:443>
-    ServerName thealley2b.pl
+    ServerName bowlinghub.pl
     DocumentRoot /var/www/booking-api/public
     
     <Directory /var/www/booking-api/public>
@@ -212,38 +212,14 @@ WantedBy=multi-user.target
 
 ## Bezpieczeństwo
 
-### Konfiguracja zmiennych środowiskowych
-
-Dodaj następujące zmienne do `.env`:
-
-```bash
-# Cloudflare Turnstile
-TURNSTILE_SECRET_KEY=your_turnstile_secret_key
-
-# Upstash Redis dla rate limiting
-UPSTASH_REDIS_REST_URL=https://your-redis-instance.upstash.io
-UPSTASH_REDIS_REST_TOKEN=your_redis_token
-```
-
-**Jak uzyskać klucze:**
-- Turnstile: Zaloguj się do Cloudflare Dashboard → Turnstile → utwórz site, skopiuj Secret Key
-- Upstash: Zaloguj się do Upstash Console → utwórz bazę Redis → skopiuj REST URL i Token
-
-Zobacz `ops/turnstile/README.md` dla szczegółowych instrukcji.
-
 ### Implementowane zabezpieczenia
 
 - **Helmet.js** - nagłówki bezpieczeństwa (HSTS, X-Frame-Options, Permissions-Policy, etc.)
-- **CORS** - tylko dozwolone domeny: `thealley2b.pl`, `www.thealley2b.pl`, `rezerwacje.thealley2b.pl`
+- **CORS** - tylko dozwolone domeny: `bowlinghub.pl`, `www.bowlinghub.pl`, `rezerwacje.bowlinghub.pl`
 - **Rate Limiting** - ograniczenia zapytań przez Upstash Redis:
   - POST `/admin/auth/login`: 5/min/IP + 20/h/konto
   - POST `/admin/auth/register`, POST `/password-reset`: 3/min/IP
   - Pozostałe POST: 20/min/IP
-- **Turnstile Guard** - ochrona przed botami na:
-  - POST `/admin/auth/*`
-  - POST `/contact/*`
-  - POST `/hold`
-  - POST `/checkout`
 - **Content-Type Validation** - tylko `application/json` dla POST/PUT/PATCH
 - **Body Size Limits** - maksymalnie 1 MB dla JSON/urlencoded
 - **CSRF Protection** - ochrona przed CSRF
@@ -252,23 +228,7 @@ Zobacz `ops/turnstile/README.md` dla szczegółowych instrukcji.
 
 ### Testowanie zabezpieczeń
 
-#### Test Turnstile Guard
-
-```bash
-# Bez tokenu Turnstile - powinno zwrócić 403
-curl -X POST http://localhost:4000/admin/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email":"test@example.com","password":"test123"}'
-
-# Z nieprawidłowym tokenem - powinno zwrócić 403
-curl -X POST http://localhost:4000/admin/auth/login \
-  -H "Content-Type: application/json" \
-  -H "CF-Turnstile-Response: invalid-token" \
-  -d '{"email":"test@example.com","password":"test123"}'
-```
-
 #### Test Rate Limiting
-
 ```bash
 # Wykonaj 25 zapytań w ciągu 60 sekund - co najmniej 5 powinno zwrócić 429
 for i in {1..25}; do
@@ -317,7 +277,7 @@ curl -X POST http://localhost:4000/hold \
 - Sprawdź logi aplikacji pod kątem błędów weryfikacji
 
 **CORS blokuje requesty:**
-- Sprawdź czy origin jest w liście dozwolonych: `thealley2b.pl`, `www.thealley2b.pl`, `rezerwacje.thealley2b.pl`
+- Sprawdź czy origin jest w liście dozwolonych: `bowlinghub.pl`, `www.bowlinghub.pl`, `rezerwacje.bowlinghub.pl`
 - W development, localhost jest automatycznie dozwolony
 
 ## Testy

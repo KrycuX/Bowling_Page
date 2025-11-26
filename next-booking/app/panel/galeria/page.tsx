@@ -25,7 +25,7 @@ import {
 import { useGallery, useUploadGalleryImage, useUpdateGalleryImage, useDeleteGalleryImage } from '../../../hooks/panel/useGallery';
 import type { GalleryImage } from '../../../hooks/panel/useGallery';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'https://api.thealley2b.pl';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'https://api.bowlinghub.pl';
 
 export default function GalleryPage() {
   const { data: images, isLoading, isError, error } = useGallery();

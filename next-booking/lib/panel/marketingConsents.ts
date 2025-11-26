@@ -53,7 +53,7 @@ export async function fetchMarketingConsents(filters: MarketingConsentsFilters =
 }
 
 export async function exportMarketingConsentsCsv(): Promise<void> {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL ?? 'https://api.thealley2b.pl'}/admin/marketing-consents/export`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL ?? 'https://api.bowlinghub.pl'}/admin/marketing-consents/export`, {
     credentials: 'include',
     headers: {
       'X-CSRF-Token': getCsrfToken() || '',

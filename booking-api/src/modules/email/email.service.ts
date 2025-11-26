@@ -402,7 +402,7 @@ export class EmailService {
           ? `${settings.senderName} <${settings.senderEmail}>`
           : settings.senderEmail,
         to: submission.email,
-        subject: 'Potwierdzenie otrzymania wiadomości - TheAlley2B',
+        subject: 'Potwierdzenie otrzymania wiadomości - BowlingHub (projekt demo)',
         html: customerHtml,
       });
 

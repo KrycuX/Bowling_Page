@@ -13,7 +13,7 @@ import cookieParser from 'cookie-parser';
 function isAllowedTheAlleyDomain(origin: string): boolean {
   try {
     const { hostname } = new URL(origin);
-    return hostname === 'thealley2b.pl' || hostname.endsWith('.thealley2b.pl');
+    return hostname === 'bowlinghub.pl' || hostname.endsWith('.bowlinghub.pl');
   } catch {
     return false;
   }
@@ -68,7 +68,7 @@ async function bootstrap() {
         return;
       }
       
-      // Allow the primary domain and subdomains of thealley2b.pl
+      // Allow the primary domain and subdomains of bowlinghub.pl
       if (isAllowedTheAlleyDomain(origin)) {
         callback(null, true);
         return;

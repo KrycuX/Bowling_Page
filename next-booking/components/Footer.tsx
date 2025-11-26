@@ -49,7 +49,7 @@ function BusinessHours() {
   useEffect(() => {
     const fetchBusinessHours = async () => {
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://api.thealley2b.pl';
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://api.bowlinghub.pl';
         const response = await fetch(`${apiUrl}/business-hours`);
         if (response.ok) {
           const json = await response.json();
@@ -140,12 +140,12 @@ function BusinessHours() {
 
 export default function Footer() {
   // Use state to avoid hydration mismatches
-  const [mainDomain, setMainDomain] = useState('https://thealley2b.pl');
+  const [mainDomain, setMainDomain] = useState('https://bowlinghub.pl');
 
   // Calculate main domain only on client to prevent hydration errors
   useEffect(() => {
     const hostname = window.location.hostname;
-    // Jeśli jesteśmy na subdomenie (np. rezerwacje.thealley2b.pl), zwróć domenę główną
+    // Jeśli jesteśmy na subdomenie (np. rezerwacje.bowlinghub.pl), zwróć domenę główną
     if (hostname.includes('rezerwacje.')) {
       setMainDomain(`https://${hostname.replace('rezerwacje.', '')}`);
     } else {
@@ -255,7 +255,7 @@ export default function Footer() {
                       Email
                     </Typography>
                     <MuiLink
-                      href="mailto:kontakt@thealley2b.pl"
+                      href="mailto:kontakt@bowlinghub.pl"
                       color="text.secondary"
                       sx={{
                         fontSize: '0.75rem',
@@ -264,7 +264,7 @@ export default function Footer() {
                         '&:hover': { color: 'primary.light' }
                       }}
                     >
-                      kontakt@thealley2b.pl
+                      kontakt@bowlinghub.pl
                     </MuiLink>
                   </Box>
                 </Box>
@@ -365,7 +365,7 @@ export default function Footer() {
         {/* Drugi poziom - Copyright */}
         <Box sx={{ textAlign: 'center' }}>
           <Typography variant="body2" color="text.secondary">
-            &copy; {new Date().getFullYear()} TheAlley2B - Premium Entertainment Hub. Wszelkie prawa zastrzeżone.
+            &copy; {new Date().getFullYear()} BowlingHub - Demo Booking Experience. Wszelkie prawa zastrzeżone.
           </Typography>
         </Box>
       </Container>

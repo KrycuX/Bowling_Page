@@ -36,25 +36,25 @@ async function seed() {
     const adminPasswordHash = await hashPassword(adminPassword);
     
     const adminUser = userRepository.create({
-      email: 'admin@thealley2b.pl',
+      email: 'admin@bowlinghub.pl',
       passwordHash: adminPasswordHash,
       role: UserRole.ADMIN,
       isActive: true,
     });
     await userRepository.save(adminUser);
-    console.log(`✅ Created admin user: admin@thealley2b.pl (password: ${adminPassword})`);
+    console.log(`✅ Created admin user: admin@bowlinghub.pl (password: ${adminPassword})`);
 
     const employeePassword = 'Employee123!';
     const employeePasswordHash = await hashPassword(employeePassword);
     
     const employeeUser = userRepository.create({
-      email: 'employee@thealley2b.pl',
+      email: 'employee@bowlinghub.pl',
       passwordHash: employeePasswordHash,
       role: UserRole.EMPLOYEE,
       isActive: true,
     });
     await userRepository.save(employeeUser);
-    console.log(`✅ Created employee user: employee@thealley2b.pl (password: ${employeePassword})`);
+    console.log(`✅ Created employee user: employee@bowlinghub.pl (password: ${employeePassword})`);
 
     // 2. Utwórz zasoby
     const resources = [
@@ -356,8 +356,8 @@ async function seed() {
     console.log('🎉 Initial data seeded successfully!');
     console.log('');
     console.log('📋 Login credentials:');
-    console.log('   Admin: admin@thealley2b.pl / Admin123!');
-    console.log('   Employee: employee@thealley2b.pl / Employee123!');
+    console.log('   Admin: admin@bowlinghub.pl / Admin123!');
+    console.log('   Employee: employee@bowlinghub.pl / Employee123!');
     console.log('');
     console.log('🎫 Sample coupons:');
     console.log('   WELCOME10 - 10% off (min 50 PLN)');

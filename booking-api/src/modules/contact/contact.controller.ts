@@ -1,8 +1,7 @@
-import { Controller, Post, Body, Inject, Req, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, Inject, Req } from '@nestjs/common';
 import { Request } from 'express';
 import { IsString, IsEmail, IsOptional, IsBoolean } from 'class-validator';
 import { ContactService, SubmitContactFormInput } from './contact.service';
-import { TurnstileGuard } from '../../common/guards/turnstile.guard';
 
 class SubmitContactFormDto {
   @IsString()
@@ -39,7 +38,6 @@ export class ContactController {
   constructor(@Inject(ContactService) private readonly contactService: ContactService) {}
 
   @Post('submit')
-  @UseGuards(TurnstileGuard)
   async submitContactForm(
     @Body() dto: SubmitContactFormDto,
     @Req() req: Request,

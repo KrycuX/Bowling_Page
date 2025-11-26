@@ -1,6 +1,6 @@
 ﻿import { getCsrfToken, updateCsrfToken } from './session';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'https://api.thealley2b.pl';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'https://api.bowlinghub.pl';
 
 export class ApiError extends Error {
   constructor(public status: number, message: string, public body?: unknown) {

@@ -37,7 +37,6 @@ import {
 } from '../../lib/pricing';
 import { apiClient } from '../../lib/apiClient';
 import { z } from 'zod';
-import { Turnstile, type TurnstileRef } from '../Turnstile';
 import { usePublicSettings } from '../../hooks/usePublicSettings';
 
 type EnhancedBookingFormProps = {
@@ -87,12 +86,6 @@ export function EnhancedBookingForm({
   const [acceptRodo, setAcceptRodo] = useState(false);
   const [acceptMarketing, setAcceptMarketing] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
-  const turnstileRef = useRef<TurnstileRef>(null);
-  const tokenPromiseRef = useRef<{
-    resolve: (token: string) => void;
-    reject: (error: Error) => void;
-  } | null>(null);
   
   const acceptAll = paymentMethod === 'ONLINE' 
     ? acceptPrzelewy24 && acceptRodo && acceptMarketing
@@ -410,52 +403,7 @@ export function EnhancedBookingForm({
       .filter((item): item is HoldItemInput => item !== null);
   };
 
-  // Handler for Turnstile token success
-  const handleTurnstileSuccess = (token: string) => {
-    // If we're waiting for a fresh token (for checkout), resolve the promise
-    if (tokenPromiseRef.current) {
-      tokenPromiseRef.current.resolve(token);
-      tokenPromiseRef.current = null;
-    } else {
-      // Otherwise, just set the token normally
-      setTurnstileToken(token);
-    }
-  };
-
-  // Handler for Turnstile token error
-  const handleTurnstileError = () => {
-    // If we're waiting for a fresh token, reject the promise
-    if (tokenPromiseRef.current) {
-      tokenPromiseRef.current.reject(new Error('Turnstile verification failed'));
-      tokenPromiseRef.current = null;
-    } else {
-      setTurnstileToken(null);
-    }
-  };
-
-  // Function to get a fresh Turnstile token by resetting and waiting for a new one
-  const getFreshTurnstileToken = (): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      // Store the promise resolvers
-      tokenPromiseRef.current = { resolve, reject };
-      
-      // Reset Turnstile to get a new token
-      if (turnstileRef.current) {
-        turnstileRef.current.reset();
-      } else {
-        reject(new Error('Turnstile widget not available'));
-        tokenPromiseRef.current = null;
-      }
-      
-      // Set a timeout to reject if no token is received within 30 seconds
-      setTimeout(() => {
-        if (tokenPromiseRef.current) {
-          tokenPromiseRef.current.reject(new Error('Turnstile token timeout'));
-          tokenPromiseRef.current = null;
-        }
-      }, 30000);
-    });
-  };
+  // Turnstile/Cloudflare verification has been removed in the demo version
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -465,7 +413,7 @@ export function EnhancedBookingForm({
       return;
     }
     
-    if (!canSubmit || !turnstileToken) return;
+    if (!canSubmit) return;
 
     setIsSubmitting(true); // Ustaw flagę na początku
     try {
@@ -480,10 +428,7 @@ export function EnhancedBookingForm({
         customer,
         ...(couponApplied && couponCode ? { couponCode } : {}),
         paymentMethod,
-        marketingConsent: acceptMarketing,
-        turnstileToken,
-        // Only provide callback for online payments (which require checkout)
-        ...(paymentMethod === 'ONLINE' ? { getFreshTurnstileToken } : {})
+        marketingConsent: acceptMarketing
       });
       // W przypadku sukcesu nie resetujemy flagi, bo nastąpi przekierowanie
     } catch (error) {
@@ -1046,22 +991,12 @@ export function EnhancedBookingForm({
                     )}
                     
                     <Divider sx={{ my: 1 }} />
-                    <Box sx={{ display: 'flex', justifyContent: 'center', py: 2 }}>
-                      <Turnstile
-                        ref={turnstileRef}
-                        siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ''}
-                        onSuccess={handleTurnstileSuccess}
-                        onError={handleTurnstileError}
-                        mode="managed"
-                        theme="auto"
-                      />
-                    </Box>
                     <Stack justifyContent="center" alignItems="center">
                   <Button 
                     type="submit" 
                     variant="contained" 
                     size="large"
-                    disabled={!canSubmit || holdMutation.isPending || isSubmitting || !turnstileToken}
+                    disabled={!canSubmit || holdMutation.isPending || isSubmitting}
                     fullWidth
                     sx={{ 
                       backgroundColor: '#8B5CF6',
@@ -1114,7 +1049,7 @@ export function EnhancedBookingForm({
               type="submit"
               variant="contained"
               size="large"
-              disabled={!canSubmit || holdMutation.isPending || isSubmitting || !turnstileToken}
+              disabled={!canSubmit || holdMutation.isPending || isSubmitting}
               sx={{
                 backgroundColor: '#8B5CF6',
                 '&:hover': { backgroundColor: '#7C3AED' },

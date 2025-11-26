@@ -34,8 +34,6 @@ type HoldPayload = {
   couponCode?: string;
   paymentMethod?: PaymentMethod;
   marketingConsent?: boolean;
-  turnstileToken?: string;
-  getFreshTurnstileToken?: () => Promise<string>;
 };
 
 type HoldAndCheckoutResult = {
@@ -44,21 +42,12 @@ type HoldAndCheckoutResult = {
 };
 
 async function createHold(payload: HoldPayload): Promise<HoldResponse> {
-  const { turnstileToken, ...restPayload } = payload;
-  const headers: Record<string, string> = {};
-  if (turnstileToken) {
-    headers['CF-Turnstile-Response'] = turnstileToken;
-  }
-  const { data } = await apiClient.post('/hold', restPayload, { headers });
+  const { data } = await apiClient.post('/hold', payload);
   return holdResponseSchema.parse(data);
 }
 
-async function checkout(orderId: string, turnstileToken?: string): Promise<CheckoutResponse> {
-  const headers: Record<string, string> = {};
-  if (turnstileToken) {
-    headers['CF-Turnstile-Response'] = turnstileToken;
-  }
-  const { data } = await apiClient.post('/checkout', { orderId }, { headers });
+async function checkout(orderId: string): Promise<CheckoutResponse> {
+  const { data } = await apiClient.post('/checkout', { orderId });
   return checkoutResponseSchema.parse(data);
 }
 
@@ -71,21 +60,7 @@ export function useHoldAndCheckout() {
         return { hold };
       }
 
-      // Get a fresh Turnstile token for checkout since tokens are single-use
-      let checkoutToken: string | undefined;
-      if (payload.getFreshTurnstileToken) {
-        try {
-          checkoutToken = await payload.getFreshTurnstileToken();
-        } catch (error) {
-          console.error('Failed to get fresh Turnstile token for checkout:', error);
-          throw new Error('Failed to verify identity for checkout. Please try again.');
-        }
-      } else {
-        // Fallback: if no callback provided, don't send token (may fail if backend requires it)
-        checkoutToken = undefined;
-      }
-
-      const checkoutResult = await checkout(hold.orderId, checkoutToken);
+      const checkoutResult = await checkout(hold.orderId);
 
       return {
         hold,

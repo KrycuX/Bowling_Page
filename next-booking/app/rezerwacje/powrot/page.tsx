@@ -193,7 +193,7 @@ function PaymentReturnContent() {
   }, [isClient, searchParams, enqueueSnackbar, settings.data]);
 
   const handleGoHome = () => {
-    // Pobierz domenę główną - jeśli jesteśmy na subdomenie (np. rezerwacje.thealley2b.pl), wróć do domeny głównej
+    // Pobierz domenę główną - jeśli jesteśmy na subdomenie (np. rezerwacje.bowlinghub.pl), wróć do domeny głównej
     if (typeof window !== 'undefined') {
       const hostname = window.location.hostname;
       if (hostname.includes('rezerwacje.')) {
@@ -205,7 +205,7 @@ function PaymentReturnContent() {
   };
 
   const handleTryAgain = () => {
-    // Pobierz domenę główną - jeśli jesteśmy na subdomenie (np. rezerwacje.thealley2b.pl), wróć do domeny głównej
+    // Pobierz domenę główną - jeśli jesteśmy na subdomenie (np. rezerwacje.bowlinghub.pl), wróć do domeny głównej
     if (typeof window !== 'undefined') {
       const hostname = window.location.hostname;
       if (hostname.includes('rezerwacje.')) {

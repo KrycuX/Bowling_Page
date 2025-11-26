@@ -3,7 +3,6 @@ import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { SessionService } from './session.service';
 import { AuthGuard } from '../../common/guards/auth.guard';
-import { TurnstileGuard } from '../../common/guards/turnstile.guard';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { User } from '../../database/entities';
 import { IsEmail, IsString, MinLength } from 'class-validator';
@@ -27,7 +26,6 @@ export class AuthController {
   ) {}
 
   @Post('login')
-  @UseGuards(TurnstileGuard)
   async login(
     @Body() loginDto: LoginDto,
     @Ip() ipAddress: string,
@@ -58,7 +56,7 @@ export class AuthController {
     // Only set domain in production (for subdomains)
     // On localhost, don't set domain to allow cookie to work
     if (isProduction) {
-      cookieOptions.domain = '.thealley2b.pl'; // Available for all subdomains
+      cookieOptions.domain = '.bowlinghub.pl'; // Available for all subdomains
     }
 
     res.cookie('sessionToken', result.sessionToken, cookieOptions);
@@ -88,7 +86,7 @@ export class AuthController {
     const clearCookieOptions: any = {};
     
     if (isProduction) {
-      clearCookieOptions.domain = '.thealley2b.pl'; // Must match the domain used when setting the cookie
+      clearCookieOptions.domain = '.bowlinghub.pl'; // Must match the domain used when setting the cookie
     }
 
     res.clearCookie('sessionToken', clearCookieOptions);

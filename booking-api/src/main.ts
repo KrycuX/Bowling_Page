@@ -14,7 +14,7 @@ import express from 'express';
 function isAllowedTheAlleyDomain(origin: string): boolean {
   try {
     const { hostname } = new URL(origin);
-    return hostname === 'thealley2b.pl' || hostname.endsWith('.thealley2b.pl');
+    return hostname === 'bowlinghub.pl' || hostname.endsWith('.bowlinghub.pl');
   } catch {
     return false;
   }
@@ -34,16 +34,6 @@ async function bootstrap() {
   const creatingTimeout = setTimeout(() => {
     console.warn('[BOOT] Still creating Nest application after 5s...');
   }, 5000);
-
-  const turnstileSecret = process.env.TURNSTILE_SECRET_KEY;
-  if (!turnstileSecret) {
-    console.error('[BOOT] ⚠️ TURNSTILE_SECRET_KEY is NOT set. Turnstile-protected endpoints will reject requests.');
-  } else {
-    const masked = turnstileSecret.length <= 6
-      ? '***'
-      : `${turnstileSecret.slice(0, 3)}***${turnstileSecret.slice(-3)}`;
-    console.log(`[BOOT] ✅ TURNSTILE_SECRET_KEY loaded (length=${turnstileSecret.length}, preview=${masked}).`);
-  }
 
   let app;
   try {
@@ -81,9 +71,9 @@ async function bootstrap() {
 
   // CORS - only allow specific production domains
   const allowedOrigins = [
-    'https://thealley2b.pl',
-    'https://www.thealley2b.pl',
-    'https://rezerwacje.thealley2b.pl',
+    'https://bowlinghub.pl',
+    'https://www.bowlinghub.pl',
+    'https://rezerwacje.bowlinghub.pl',
     'https://secure.przelewy24.pl',
     'https://sandbox.przelewy24.pl',
     'https://panel.przelewy24.pl',
@@ -96,7 +86,7 @@ async function bootstrap() {
     const corsOptions = {
       origin: true,
       credentials: true,
-      allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'X-CSRF-Token', 'CF-Turnstile-Response'],
+      allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'X-CSRF-Token'],
       methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'] as const,
     };
 

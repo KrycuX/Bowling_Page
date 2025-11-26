@@ -7,11 +7,11 @@
 
 const https = require('https');
 
-const API_BASE = 'https://api.thealley2b.pl';
-const FRONTEND_BASE = 'https://rezerwacje.thealley2b.pl';
+const API_BASE = 'https://api.bowlinghub.pl';
+const FRONTEND_BASE = 'https://rezerwacje.bowlinghub.pl';
 
 // Test credentials (replace with actual test credentials)
-const TEST_EMAIL = 'admin@thealley2b.pl';
+const TEST_EMAIL = 'admin@bowlinghub.pl';
 const TEST_PASSWORD = 'your-password-here';
 
 async function makeRequest(url, options = {}) {
